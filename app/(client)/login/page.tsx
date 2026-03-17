@@ -17,6 +17,8 @@ const Login = () => {
         setLoading(true);
         try {
             await login(formData);
+
+            
             router.push("/");
             router.refresh();
         } catch (err: any) {
