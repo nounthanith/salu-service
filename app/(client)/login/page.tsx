@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@/components/shared/Button';
 import Input from '@/components/shared/Input';
 import Link from 'next/link';
+import { login } from '@/app/src/auth.service';
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
@@ -14,24 +15,10 @@ const Login = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API}/api/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || "Invalid credentials");
-            }
-
-            // Success
+            await login(formData);
             router.push("/");
             router.refresh();
-
         } catch (err: any) {
             alert(`⚠️ Login Error: ${err.message}`);
         } finally {
