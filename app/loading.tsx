@@ -1,5 +1,7 @@
 import LoadingUI from "@/components/shared/LoadingUI";
 
 export default function Loading() {
-    return <LoadingUI>Home</LoadingUI>;
+    return <div className="flex justify-center items-center h-screen">
+        <LoadingUI text="Home" />
+    </div>;
 }
