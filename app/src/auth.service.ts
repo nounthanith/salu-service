@@ -3,6 +3,13 @@ export type LoginPayload = {
     password: string;
 };
 
+export type RegisterPayload = {
+    name: string;
+    email: string;
+    password: string;
+    role?: string;
+};
+
 export type LoginResponse = {
     message?: string;
     user?: {
@@ -29,6 +36,26 @@ export async function login(payload: LoginPayload): Promise<LoginResponse> {
     }
 
     
+
+    return data;
+}
+
+export async function register(payload: RegisterPayload): Promise<LoginResponse> {
+    const response = await fetch(`/api/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            ...payload,
+            role: payload.role ?? "user",
+        }),
+        credentials: "include",
+    });
+
+    const data = (await response.json().catch(() => ({}))) as LoginResponse;
+
+    if (!response.ok) {
+        throw new Error(data.message || "Registration failed");
+    }
 
     return data;
 }
