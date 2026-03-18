@@ -161,8 +161,12 @@ export default function ClientLayout({
                                                 <Link
                                                     href="/dashboard"
                                                     onClick={() => setIsProfileOpen(false)}
-                                                    className="block w-full px-4 py-3 text-sm text-warn font-bold hover:bg-warn/10 transition-colors"
+                                                    // Added 'flex' and 'items-center' to align the dot and text
+                                                    className="w-full text-left px-4 py-3 text-sm text-warn font-bold hover:bg-warn/10 transition-colors flex items-center gap-2"
                                                 >
+                                                    {/* The Dot */}
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-warn" />
+
                                                     Dashboard
                                                 </Link>
                                             )}
