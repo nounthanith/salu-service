@@ -1,10 +1,11 @@
+// proxy.ts
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 const ADMIN_PATH_PREFIXES = ["/dashboard", "/users"];
 const apiBase = process.env.NEXT_PUBLIC_API;
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const isAdminPath = ADMIN_PATH_PREFIXES.some(
@@ -13,8 +14,6 @@ export function middleware(req: NextRequest) {
 
   if (!isAdminPath) return NextResponse.next();
 
-  // Expect the auth token to be stored in a cookie named "token".
-  // If you use a different cookie name, change it here.
   const token = req.cookies.get("token")?.value;
 
   if (!token) {
@@ -24,15 +23,12 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // If we don't have an API base URL, fail closed for admin pages.
   if (!apiBase) {
     const url = req.nextUrl.clone();
     url.pathname = "/";
     return NextResponse.redirect(url);
   }
 
-  // Role check: only allow admin users into admin routes.
-  // We validate role by calling the upstream profile endpoint.
   return (async () => {
     let upstream: Response;
     try {
@@ -80,4 +76,3 @@ export function middleware(req: NextRequest) {
 export const config = {
   matcher: ["/dashboard/:path*", "/users/:path*"],
 };
-
