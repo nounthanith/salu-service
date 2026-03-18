@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <ClientLayout>
       <div>
-        
+        Home
       </div>
     </ClientLayout>
   );
