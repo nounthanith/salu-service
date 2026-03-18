@@ -1,17 +1,7 @@
-import Link from "next/link";
+'use client';
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-    const navItems = [
-        { href: "/dashboard", label: "Dashboard" },
-        { href: "/users", label: "Users" },
-    ];
-    return (
-        <div>
-            <nav>
-                {navItems.map((item) => (
-                    <Link key={item.href} href={item.href}>{item.label}</Link>
-                ))}
-            </nav>
-            {children}
-        </div>);
+import { AdminLayout } from "@/components/layouts/Admin";
+
+export default function AdminRootLayout({ children }: { children: React.ReactNode }) {
+    return <AdminLayout>{children}</AdminLayout>;
 }
