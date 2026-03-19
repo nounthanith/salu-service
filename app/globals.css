@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --foreground-muted: #e5e5e5; /* Add this for subtle dots */
   --danger: #c1121f;
   --warn: #ffbe0b;
 }
@@ -20,6 +21,7 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --foreground-muted: #262626; /* Darker dots for dark mode */
   }
 }
 

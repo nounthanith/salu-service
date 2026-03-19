@@ -229,7 +229,7 @@ export default function ClientLayout({
             </header>
 
             {/* MAIN */}
-            <main className="flex-1 w-full pt-20 pb-12 px-4">
+            <main className="flex-1 w-full pt-14 px-0 md:px-4">
                 <div className="max-w-7xl mx-auto">
                     {children}
                 </div>
