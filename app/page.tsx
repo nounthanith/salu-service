@@ -39,9 +39,7 @@ export default function Home() {
                 lu
               </span>
             </div>
-            <span className="text-2xl font-medium tracking-tight opacity-80">
-              Servive
-            </span>
+            
           </h1>
 
           <div className="flex gap-4">
