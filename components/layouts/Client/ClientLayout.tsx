@@ -3,61 +3,27 @@
 import Link from "next/link";
 import { navItems } from "./index";
 import Button from "@/components/shared/Button";
+import { useAuth } from "./useAuth";
 import { useEffect, useState, useRef } from "react";
-import { getProfile, logout } from "@/app/src/auth.service";
-import { useRouter, usePathname } from "next/navigation";
-
-/* ---------------- TYPES ---------------- */
-
-type User = {
-    id: string;
-    name?: string;
-    email: string;
-    role?: string;
-};
+import { usePathname } from "next/navigation";
 
 export default function ClientLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const router = useRouter();
     const pathname = usePathname();
-
-    const [profile, setProfile] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
     const [isOpen, setIsOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
-
     const profileRef = useRef<HTMLDivElement>(null);
-    const isAuthenticated = !!profile;
-    const isAdmin = profile?.role === "admin";
-
-    /* ---------------- FETCH USER (Your Original Logic) ---------------- */
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await getProfile();
-                const user = (response as any)?.data?.user ?? response.user;
-
-                if (user) {
-                    setProfile({
-                        id: user.id,
-                        name: user.name,
-                        email: user.email,
-                        role: user.role,
-                    });
-                }
-            } catch (error) {
-                console.log("Session expired or invalid");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchUser();
-    }, []);
+    
+    const {
+        profile,
+        loading,
+        isAuthenticated,
+        isAdmin,
+        handleLogout
+    } = useAuth();
 
     /* ---------------- CLICK OUTSIDE HANDLER ---------------- */
 
@@ -70,23 +36,6 @@ export default function ClientLayout({
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
-
-    /* ---------------- LOGOUT ---------------- */
-
-    const handleLogout = async () => {
-        try {
-            const ok = window.confirm("Are you sure you want to logout?");
-            if (!ok) return;
-
-            await logout();
-            setProfile(null);
-            setIsProfileOpen(false);
-            router.push("/login");
-            router.refresh();
-        } catch (error) {
-            console.error("Logout failed", error);
-        }
-    };
 
     return (
         <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -127,8 +76,6 @@ export default function ClientLayout({
                             <div className="h-8 w-8 animate-pulse bg-foreground/10 rounded-full" />
                         ) : isAuthenticated ? (
                             <>
-                                {/* ADMIN ONLY */}
-
                                 <div className="relative" ref={profileRef}>
                                     <button
                                         onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -151,7 +98,10 @@ export default function ClientLayout({
 
                                             {/* DANGER ACTION */}
                                             <button
-                                                onClick={handleLogout}
+                                                onClick={() => {
+                                                    setIsProfileOpen(false);
+                                                    handleLogout();
+                                                }}
                                                 className="w-full text-left px-4 py-3 text-sm text-danger font-bold hover:bg-red-500/10 transition-colors flex items-center gap-2"
                                             >
                                                 <span className="w-1.5 h-1.5 rounded-full bg-danger" />
@@ -161,12 +111,9 @@ export default function ClientLayout({
                                                 <Link
                                                     href="/dashboard"
                                                     onClick={() => setIsProfileOpen(false)}
-                                                    // Added 'flex' and 'items-center' to align the dot and text
                                                     className="w-full text-left px-4 py-3 text-sm text-warn font-bold hover:bg-warn/10 transition-colors flex items-center gap-2"
                                                 >
-                                                    {/* The Dot */}
                                                     <span className="w-1.5 h-1.5 rounded-full bg-warn" />
-
                                                     Dashboard
                                                 </Link>
                                             )}
