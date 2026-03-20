@@ -21,6 +21,22 @@ export type LoginResponse = {
     [key: string]: unknown;
 };
 
+export type User = {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    created_at?: string;
+    updated_at?: string;
+};
+
+export type UsersResponse = {
+    message?: string;
+    users?: User[];
+    data?: User[] | { users?: User[] };
+    [key: string]: unknown;
+};
+
 export async function login(payload: LoginPayload): Promise<LoginResponse> {
     const response = await fetch(`/api/auth/login`, {
         method: "POST",
@@ -35,7 +51,7 @@ export async function login(payload: LoginPayload): Promise<LoginResponse> {
         throw new Error(data.message || "Invalid credentials");
     }
 
-    
+
 
     return data;
 }
@@ -81,4 +97,20 @@ export async function logout(): Promise<void> {
         method: "POST",
         credentials: "include",
     });
+}
+
+export async function getAllUsers(): Promise<UsersResponse> {
+    const response = await fetch(`/api/auth/users`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",   // ← sends your auth cookie (token) automatically
+    });
+
+    const data = (await response.json().catch(() => ({}))) as UsersResponse;
+
+    if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch users");
+    }
+
+    return data;
 }

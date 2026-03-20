@@ -195,14 +195,14 @@ export default function ClientLayout({
 
                 {/* MOBILE MENU */}
                 {isOpen && (
-                    <nav className="md:hidden flex flex-col gap-1 px-4 pb-6 border-t border-foreground/10 bg-background animate-in slide-in-from-top-2">
+                    <nav className="md:hidden flex flex-col gap-1 px-4 pb-6 border-t border-foreground/50 bg-background animate-in slide-in-from-top-2">
                         <div className="pt-2">
                             {navItems.map((item, index) => (
                                 <Link
                                     key={index}
                                     href={item.href}
                                     onClick={() => setIsOpen(false)}
-                                    className={`block py-4 text-sm font-bold border-b border-foreground/5 ${pathname === item.href ? "text-foreground" : "text-foreground/50"
+                                    className={`block py-4 text-sm font-bold border-b border-foreground/50 ${pathname === item.href ? "text-foreground" : "text-foreground/50"
                                         }`}
                                 >
                                     {item.label}
@@ -219,9 +219,8 @@ export default function ClientLayout({
                             </div>
                         )}
                         {!isAuthenticated && (
-                            <div className="flex flex-col gap-2 mt-4">
-                                <Link href="/login" onClick={() => setIsOpen(false)}><Button className="w-full">Login</Button></Link>
-                                <Link href="/register" onClick={() => setIsOpen(false)}><Button className="w-full">Register</Button></Link>
+                            <div className="">
+                                <Link href="/login"><Button className="w-full">Login</Button></Link>
                             </div>
                         )}
                     </nav>
